@@ -1,5 +1,5 @@
-import { useAuth } from "@clerk/clerk-react";
 import React, { useEffect } from "react";
+import { useAuth } from "@clerk/clerk-react";
 import { Outlet, useNavigate } from "react-router-dom";
 import ChatList from "../../Components/chatList/chatList";
 import "./dashboardLayout.css";
