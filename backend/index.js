@@ -54,7 +54,7 @@ app.post("/", async (req, res) => {
     const savedRecord = await newRecord.save();
 
     res.status(200).send(savedRecord);
-    console.log("Record Saved");
+    console.log("Records Saved");
   } catch (err) {
     res.status(500).send(err);
     console.log("post problem from server");
