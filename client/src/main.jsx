@@ -7,8 +7,8 @@ import DashboardPage from "./routes/dashboardPage/DashboardPage";
 import ChatPage from "./routes/chatPage/ChatPage";
 import RootLayout from "./layouts/rootLayout/RootLayout";
 import DashboardLayout from "./layouts/dashboardLayout/DashboardLayout";
-import SignInPage from "./routes/signinPage/SignInPage";
-import SignOutPage from "./routes/signoutPage/SignOutPage";
+import SignInPage from "./routes/signInPage/signInPage";
+import SignUpPage from "./routes/signUpPage/signUpPage";
 
 const router = createBrowserRouter([
   {
@@ -19,12 +19,12 @@ const router = createBrowserRouter([
         element: <Homepage />,
       },
       {
-        path: "/sign-in/*",
-        element: <SignInPage />,
+        path: "/signin/*",
+        element: <SignInPage/>,
       },
       {
-        path: "/sign-out/*",
-        element: <SignOutPage />,
+        path: "/signup/*",
+        element: <SignUpPage />,
       },
       {
         element: <DashboardLayout />,
@@ -34,7 +34,7 @@ const router = createBrowserRouter([
             element: <DashboardPage />,
           },
           {
-            path: "/dashboard/chats/:id",
+            path: "/dashboard/chats123",
             element: <ChatPage />,
           },
         ],

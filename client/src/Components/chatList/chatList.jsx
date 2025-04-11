@@ -1,33 +1,33 @@
-import React from "react";
 import "./chatList.css";
+import { Link } from "react-router-dom";
 
 const ChatList = () => {
   return (
     <div className="chatList">
       <span className="title">DASHBOARD</span>
-      <a to="/dashboard">Create a new chat</a>
-      <a to="">Explore AI chat</a>
-      <a to="">Contact</a>
+      <Link to="/dashboard">Create a new chat</Link>
+      <Link to="">Explore AI chat</Link>
+      <Link to="">Contact</Link>
       <hr />
       <span className="title">Recent Chats</span>
       <div className="list">
-        <a to="/">My Chats List</a>
-        <a to="/">My Chats List</a>
-        <a to="/">My Chats List</a>
-        <a to="/">My Chats List</a>
-        <a to="/">My Chats List</a>
-        <a to="/">My Chats List</a>
-        <a to="/">My Chats List</a>
-        <a to="/">My Chats List</a>
-        <a to="/">My Chats List</a>
-        <a to="/">My Chats List</a>
-        <a to="/">My Chats List</a>
+        <Link to="/">My Chats List</Link>
+        <Link to="/">My Chats List</Link>
+        <Link to="/">My Chats List</Link>
+        <Link to="/">My Chats List</Link>
+        <Link to="/">My Chats List</Link>
+        <Link to="/">My Chats List</Link>
+        <Link to="/">My Chats List</Link>
+        <Link to="/">My Chats List</Link>
+        <Link to="/">My Chats List</Link>
+        <Link to="/">My Chats List</Link>
+        <Link to="/">My Chats List</Link>
       </div>
       <hr />
       <div className="upgrade">
         <img src="/logo.png" alt="logo" />
         <div className="texts">
-          <span>Upgrade to AI chat Pro</span>
+          <span>Upgrade to Convo AI Pro</span>
           <span>Get Unlimited Access to all features</span>
         </div>
       </div>

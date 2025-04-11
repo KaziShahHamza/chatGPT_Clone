@@ -1,11 +1,6 @@
 import { Link, Outlet } from "react-router-dom";
 import { ClerkProvider } from "@clerk/clerk-react";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from "@clerk/clerk-react";
+import { SignedIn, UserButton } from "@clerk/clerk-react";
 import "./rootLayout.css";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -21,7 +16,7 @@ const RootLayout = () => {
         <header>
           <Link to="/" className="logo">
             <img src="logo.png" alt="logo" />
-            <span>AI Chat</span>
+            <span>Convo AI</span>
           </Link>
           <div className="user">
             <SignedIn>

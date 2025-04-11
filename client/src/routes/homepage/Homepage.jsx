@@ -2,19 +2,23 @@ import { Link } from "react-router-dom";
 import "./homepage.css";
 import { TypeAnimation } from "react-type-animation";
 import { useState } from "react";
+import { useUser } from "@clerk/clerk-react";
+
 
 const Homepage = () => {
-  const [typingStatus, setTypingStatus] = useState("human1");
+  const [typingStatus, setTypingStatus] = useState("alex");
+  const { user } = useUser();
+
+  // console.log("UserId: ", user?.id);
 
   return (
     <div className="homepage">
       <img src="/orbital.png" alt="" className="orbital" />
       <div className="left">
-        <h1>LAMA AI</h1>
-        <h2>Supercharge your creativity and productivity</h2>
+        <h1>Convo AI</h1>
+        <h2>Your personal AI assistant</h2>
         <h3>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Placeat sint
-          dolorem doloribus, architecto dolor.
+        Experience seamless interactions with your intelligent assistant, always ready to assist and engage you, day or night.
         </h3>
         <Link to="/dashboard">Get Started</Link>
       </div>
@@ -27,35 +31,35 @@ const Homepage = () => {
           <div className="chat">
             <img
               src={
-                typingStatus === "human1"
+                typingStatus === "alex"
                   ? "/human1.jpeg"
-                  : typingStatus === "human2"
+                  : typingStatus === "eva"
                   ? "/human2.jpeg"
-                  : "bot.png"
+                  : "/bot.png"
               }
               alt=""
             />
             <TypeAnimation
               sequence={[
-                "Human: We produce food for Mice",
+                "Alex: Who wrote '1984'",
                 2000,
                 () => {
                   setTypingStatus("bot");
                 },
-                "Bot: We produce food for Hamsters",
+                "Bot: George Orwell",
                 2000,
                 () => {
-                  setTypingStatus("human2");
+                  setTypingStatus("eva");
                 },
-                "Human2: We produce food for Guinea Pigs",
+                "Eva: Define photosynthesis",
                 2000,
                 () => {
                   setTypingStatus("bot");
                 },
-                "Bot: We produce food for Chinchillas",
+                "Bot: Processing of plants use to make food",
                 2000,
                 () => {
-                  setTypingStatus("human1");
+                  setTypingStatus("Alex");
                 },
               ]}
               wrapper="span"

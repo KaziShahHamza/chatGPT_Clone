@@ -8,9 +8,9 @@ const chatSchema = new mongoose.Schema(
     },
     history: [
       {
-        role: { type: String, required: true, enum: ["user", "model"], },
-        parts: [ { text: {type: String, required: true, }, }, ],
-        img: { type: String, required: true, },
+        role: { type: String, required: true, enum: ["user", "model"] },
+        parts: [{ text: { type: String, required: true } }],
+        img: { type: String, required: false },
       },
     ],
   },
