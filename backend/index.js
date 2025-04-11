@@ -1,24 +1,26 @@
 import express from "express";
+import mongoose from "mongoose";
+import "dotenv/config";
 import cors from "cors";
 import ImageKit from "imagekit";
-import mongoose from "mongoose";
-import newModel from "./models/newModel.js";
 import chatModel from "./models/chatModel.js";
 import userChatModel from "./models/userChatModel.js";
+import { clerkMiddleware } from "@clerk/express";
+import { clerkClient, requireAuth, getAuth } from "@clerk/express";
 
 const app = express();
-const port = process.env.PORT || 3002;
+const port = process.env.PORT || 3000;
 
 app.use(
   cors({
     origin: process.env.CLIENT_URL,
+    credentials: true,
   })
 );
-
 app.use(express.json());
+app.use(clerkMiddleware());
 
 const connect = async () => {
-  // console.log(process.env.MONGOURI);
   try {
     await mongoose.connect(process.env.MONGOURI);
     console.log("Database connected");
@@ -36,44 +38,29 @@ const imagekit = new ImageKit({
   privateKey: process.env.IMAGEKIT_PRIVATE_KEY,
 });
 
-// app.get("/:id", async (req, res) => {
-//   try {
-//     const id = req.params.id;
-//     const records = await newModel.find({ userId: id });
-
-//     if (records.length === 0) {
-//       return res.status(404).send("No records found");
-//     }
-//     res.status(200).send(records);
-//     console.log("Records received");
-//   } catch (err) {
-//     res.status(500).send(err);
-//   }
-// });
-
-// app.post("/", async (req, res) => {
-//   try {
-//     const newRecordBody = req.body;
-//     const newRecord = new newModel(newRecordBody);
-//     const savedRecord = await newRecord.save();
-
-//     res.status(200).send(savedRecord);
-//     console.log("Records Saved");
-//   } catch (err) {
-//     res.status(500).send(err);
-//     console.log("post problem from server");
-//   }
-// });
-
 app.get("/api/upload", (req, res) => {
   const result = imagekit.getAuthenticationParameters();
   res.send(result);
 });
 
-app.post("/api/chats", async (req, res) => {
-  const { userId, text } = req.body;
+app.get("/api/userchats", requireAuth(), async (req, res) => {
+  const { userId } = getAuth(req);
 
-  console.log("userId: ", userId, "text: ", text);
+  try {
+    const userChat = await userChatModel.find({ userId: userId });
+
+    res.status(200).send(userChat[0].chats);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("Error fetching user chats.");
+  }
+});
+
+app.post("/api/chats", requireAuth(), async (req, res) => {
+  const { userId } = getAuth(req);
+  const { text } = req.body;
+
+  // console.log("userId: ", userId, "text: ", text);
   try {
     const newChat = new chatModel({
       userId: userId,
@@ -84,14 +71,14 @@ app.post("/api/chats", async (req, res) => {
         },
       ],
     });
-    console.log("newChat: ", newChat);
+    // console.log("newChat: ", newChat);
 
     const savedChat = await newChat.save();
     // console.log("savedChat Id: ", savedChat._id);
-    console.log("savedChat: ", savedChat);
+    // console.log("savedChat: ", savedChat);
 
     const userChat = await userChatModel.find({ userId: userId });
-    console.log("userChat: ", userChat);
+    // console.log("userChat: ", userChat);
 
     if (!userChat.length) {
       const newUserChat = new userChatModel({
@@ -99,12 +86,12 @@ app.post("/api/chats", async (req, res) => {
         chats: [
           {
             _id: savedChat._id,
-            title: text.substring(0, 40),
+            title: text.substring(0, 20),
           },
         ],
       });
 
-      console.log("newUserChat: ", newUserChat);
+      // console.log("newUserChat: ", newUserChat);
 
       await newUserChat.save();
     } else {
@@ -114,17 +101,27 @@ app.post("/api/chats", async (req, res) => {
           $push: {
             chats: {
               _id: savedChat._id,
-              title: text.substring(0, 40),
+              title: text.substring(0, 20),
             },
           },
         }
-      );  
+      );
       res.status(201).send(newChat._id);
     }
   } catch (error) {
     console.log(error);
     res.status(500).send("Error creating chat.");
   }
+});
+
+app.get("/protected", requireAuth(), async (req, res) => {
+  const { userId } = getAuth(req);
+
+  const user = await clerkClient.users.getUser(userId);
+
+  console.log("userId: ", userId);
+  // console.log("Clerk User: ", user);
+  return res.json({ user });
 });
 
 app.listen(port, () => {
