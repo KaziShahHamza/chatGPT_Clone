@@ -52,7 +52,7 @@ app.get("/api/userchats", requireAuth(), async (req, res) => {
     res.status(200).send(userChat[0].chats);
   } catch (error) {
     console.log(error);
-    res.status(500).send("Error fetching user chats.");
+    res.status(500).send("Error fetching userChatModel.");
   }
 });
 
