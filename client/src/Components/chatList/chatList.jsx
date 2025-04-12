@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 const ChatList = () => {
-  const { data, isPending, error } = useQuery({
+  const { data: chats, isPending, error } = useQuery({
     queryKey: ["chatlist"],
     queryFn: () =>
       fetch(`${import.meta.env.VITE_SERVER_URL}/api/userchats`, {
@@ -24,7 +24,7 @@ const ChatList = () => {
           ? "Loading..."
           : error
           ? "Something went wrong"
-          : data.map((chat) => (
+          : chats.map((chat) => (
               <Link to={`/dashboard/chats/${chat._id}`} key={chat._id}>
                 {chat.title}
               </Link>

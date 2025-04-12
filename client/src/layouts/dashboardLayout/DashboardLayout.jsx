@@ -6,15 +6,13 @@ import "./dashboardLayout.css";
 
 const DashboardLayout = () => {
   const { userId, isLoaded } = useAuth();
-
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isLoaded && !userId) {
-      navigate("/sign-in");
+      navigate("/signin");
     }
   }, [isLoaded, userId, navigate]);
-
   if (!isLoaded) return <div>Loading...</div>;
 
   return (

@@ -25,11 +25,10 @@ const connect = async () => {
     await mongoose.connect(process.env.MONGOURI);
     console.log("Database connected");
   } catch (error) {
-    console.log("Database not connected");
     console.log(error);
+    console.log("Database not connected");
   }
 };
-
 connect();
 
 const imagekit = new ImageKit({
@@ -48,7 +47,6 @@ app.get("/api/userchats", requireAuth(), async (req, res) => {
 
   try {
     const userChat = await userChatModel.find({ userId: userId });
-
     res.status(200).send(userChat[0].chats);
   } catch (error) {
     console.log(error);
@@ -60,7 +58,6 @@ app.post("/api/chats", requireAuth(), async (req, res) => {
   const { userId } = getAuth(req);
   const { text } = req.body;
 
-  // console.log("userId: ", userId, "text: ", text);
   try {
     const newChat = new chatModel({
       userId: userId,
@@ -71,15 +68,9 @@ app.post("/api/chats", requireAuth(), async (req, res) => {
         },
       ],
     });
-    // console.log("newChat: ", newChat);
-
     const savedChat = await newChat.save();
-    // console.log("savedChat Id: ", savedChat._id);
-    // console.log("savedChat: ", savedChat);
 
     const userChat = await userChatModel.find({ userId: userId });
-    // console.log("userChat: ", userChat);
-
     if (!userChat.length) {
       const newUserChat = new userChatModel({
         userId: userId,
@@ -90,8 +81,6 @@ app.post("/api/chats", requireAuth(), async (req, res) => {
           },
         ],
       });
-
-      // console.log("newUserChat: ", newUserChat);
 
       await newUserChat.save();
     } else {
@@ -109,19 +98,20 @@ app.post("/api/chats", requireAuth(), async (req, res) => {
       res.status(201).send(newChat._id);
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Error creating chat.");
+    console.log(error.message);
+    res.status(500).send("Error creating the chat.");
   }
 });
 
-app.get("/protected", requireAuth(), async (req, res) => {
+app.get("/api/chats/:id", requireAuth(), async (req, res) => {
   const { userId } = getAuth(req);
-
-  const user = await clerkClient.users.getUser(userId);
-
-  console.log("userId: ", userId);
-  // console.log("Clerk User: ", user);
-  return res.json({ user });
+  try {
+    const chat = await chatModel.findOne({ _id: req.params.id, userId: userId });
+    res.status(200).send(chat);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Error fetching the chat.");
+  }
 });
 
 app.listen(port, () => {
