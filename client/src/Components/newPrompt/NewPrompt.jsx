@@ -21,15 +21,12 @@ const NewPrompt = ({ data }) => {
 
   const chat = model.startChat({
     history: [
-      {
-        role: "user",
-        parts: [{ text: "Hello" }],
-      },
-      {
-        role: "model",
-        parts: [{ text: "Great to meet you. What would you like to know?" }],
-      },
+      data?.history.map(({ role, parts }) => ({
+        role,
+        parts: [{ text: parts[0].text }],
+      })),
     ],
+    generationConfig: {},
   });
 
   const handleSubmit = (e) => {
@@ -42,7 +39,7 @@ const NewPrompt = ({ data }) => {
   };
 
   const add = async (text, isInitial) => {
-    if(!isInitial) setQuestion(text);
+    if (!isInitial) setQuestion(text);
 
     try {
       const result = await chat.sendMessageStream(
@@ -103,7 +100,7 @@ const NewPrompt = ({ data }) => {
 
   const hasRun = useRef(false);
   useEffect(() => {
-    if(!hasRun.current) {
+    if (!hasRun.current) {
       if (data?.history?.length === 1) {
         add(data.history[0].parts[0].text, true);
       }
