@@ -106,8 +106,41 @@ app.post("/api/chats", requireAuth(), async (req, res) => {
 app.get("/api/chats/:id", requireAuth(), async (req, res) => {
   const { userId } = getAuth(req);
   try {
-    const chat = await chatModel.findOne({ _id: req.params.id, userId: userId });
+    const chat = await chatModel.findOne({
+      _id: req.params.id,
+      userId: userId,
+    });
     res.status(200).send(chat);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Error fetching the chat.");
+  }
+});
+
+app.put("/api/chats/:id", requireAuth(), async (req, res) => {
+  const { userId } = getAuth(req);
+  const { question, answer, img } = req.body;
+
+  const newItems = [
+    ...(question
+      ? [{ role: "user", parts: [{ text: question }], ...(img && { img }) }]
+      : []),
+    { role: "model", parts: [{ text: answer }] },
+  ];
+
+  try {
+    const updatedChat = await chatModel.updateOne(
+      { _id: req.params.id, userId: userId },
+      {
+        $push: {
+          history: {
+            $each: newItems,
+          },
+        },
+      }
+    );
+
+    res.status(200).send(updatedChat);
   } catch (error) {
     console.log(error.message);
     res.status(500).send("Error fetching the chat.");
