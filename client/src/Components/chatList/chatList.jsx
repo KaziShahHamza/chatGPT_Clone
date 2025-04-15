@@ -1,6 +1,6 @@
 import "./chatList.css";
-import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { Link } from "react-router-dom";
 
 const ChatList = () => {
   const { data: chats, isPending, error } = useQuery({
@@ -17,7 +17,9 @@ const ChatList = () => {
       <Link to="/dashboard">Create a new chat</Link>
       <Link to="">Explore AI chat</Link>
       <Link to="">Contact</Link>
+
       <hr />
+
       <span className="title">Recent Chats</span>
       <div className="list">
         {isPending
@@ -30,7 +32,9 @@ const ChatList = () => {
               </Link>
             ))}
       </div>
+
       <hr />
+
       <div className="upgrade">
         <img src="/logo.png" alt="logo" />
         <div className="texts">
@@ -38,6 +42,7 @@ const ChatList = () => {
           <span>Get Unlimited Access to all features</span>
         </div>
       </div>
+
     </div>
   );
 };

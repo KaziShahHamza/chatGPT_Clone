@@ -1,7 +1,7 @@
-import { SignUp } from "@clerk/clerk-react";
 import "./signUpPage.css";
+import { SignUp } from "@clerk/clerk-react";
 
-const SignOutPage = () => {
+const SignUpPage = () => {
   return (
     <div className="signUpPage">
       <SignUp path="/signup" signInUrl="/signin" />
@@ -9,4 +9,4 @@ const SignOutPage = () => {
   );
 };
 
-export default SignOutPage;
+export default SignUpPage;
